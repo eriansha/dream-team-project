@@ -15,8 +15,8 @@ def check_admin():
         abort(403)
 
 
-@login_required
 @admin.route('/departments', methods=['GET', 'POST'])
+@login_required
 def list_departments():
     """
     List all departments
@@ -29,8 +29,8 @@ def list_departments():
                             departments=departments, title="Departments")
 
 
-@login_required
 @admin.route('/departments/add', methods=['GET', 'POST'])
+@login_required
 def add_department():
     """
     Add a department to the database
@@ -61,8 +61,8 @@ def add_department():
                             title="Add Department")
 
 
-@login_required
 @admin.route('/department/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_department(id):
     """
     Edit a department
@@ -89,8 +89,8 @@ def edit_department(id):
                             department=department, title="Edit Department")
 
 
-@login_required
 @admin.route('/departments/delete/<int:id>', methods=['GET', 'POST'])                            
+@login_required
 def delete_department(id):
     """
     Delete a department from the database
@@ -109,8 +109,8 @@ def delete_department(id):
     return render_template(title="Delete Department")
 
 
-@login_required
 @admin.route('/roles')
+@login_required
 def list_roles():
     """
     List all roles
@@ -122,8 +122,8 @@ def list_roles():
                             roles=roles, title='Roles')
 
 
-@login_required
 @admin.route('/roles/add', methods=['GET', 'POST'])
+@login_required
 def add_role():
     """
     Add a role to the database
@@ -154,8 +154,8 @@ def add_role():
                             form=form, title='Add Role')
 
 
-@login_required
 @admin.route('roles/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_role(id):
     """
     Edit a role
@@ -182,8 +182,8 @@ def edit_role(id):
                             form=form, title="Edit Role")
 
 
-@login_required
 @admin.route('roles/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
 def delete_role(id):
     """
     Delete a role from the database
@@ -202,8 +202,8 @@ def delete_role(id):
     return render_template(title="Delete Role")
 
 
-@login_required
 @admin.route('/employess')
+@login_required
 def list_employees():
     """
     List all employees
@@ -215,8 +215,8 @@ def list_employees():
                            employees=employees, title='Employees')
 
 
-@login_required
 @admin.route('/employees/assign/<int:id>', methods=['GET', 'POST'])
+@login_required
 def assign_employee(id):
     """
     Assign a department and a role to an employee
