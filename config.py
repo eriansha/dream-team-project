@@ -27,7 +27,7 @@ class TestingConfig(Config):
     """
     Testing Configurations
     """
-
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
     TESTING = True
 
 app_config = {
