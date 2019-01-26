@@ -16,7 +16,9 @@ class TestBase(TestCase):
         config_name = "testing"
         app = create_app(config_name)
 
-        params = urllib.parse.quote_plus('DRIVER={SQL Server Native Client 11.0};SERVER=(localdb)\MSSQLLocalDB;DATABASE=dreamteam_test;Trusted_Connection=yes;')
+        connection_string = 'DRIVER={SQL Server Native Client 11.0};SERVER=(localdb)\MSSQLLocalDB;DATABASE=dreamteam_test;Trusted_Connection=yes;'
+        params = urllib.parse.quote_plus(connection_string)
+        
         app.config.update(
             SQLALCHEMY_DATABASE_URI = "mssql+pyodbc:///?odbc_connect=%s" % params
         )
@@ -31,10 +33,10 @@ class TestBase(TestCase):
         db.create_all()
 
         # create test admin user
-        admin = Employee(username="admin", password="admin2019", is_admin=True)
+        admin = Employee(email="admin@test.com", username="test_admin", password="admin2019", is_admin=True)
 
         # create test non-admin user
-        employee = Employee(username="test_user", password="test2019")
+        employee = Employee(email="user@test.com", username="test_user", password="test2019")
 
         # save users to database
         db.session.add(admin)
@@ -69,10 +71,10 @@ class TestModels(TestBase):
         department = Department(name="IT", description="The IT Department")
 
         # save department to database
-        db.Session.add(Department)
+        db.session.add(department)
         db.session.commit()
 
-        self.assertEqual(Department.query.count(), 1)
+        self.assertEqual(department.query.count(), 1)
 
     
     def test_role_model(self):
@@ -145,6 +147,7 @@ class TestViews(TestBase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, redirect_url)
 
+
     def test_departments_view(self):
         """
         Test that departments page is inaccessible without login
@@ -191,13 +194,13 @@ class TestErrorPage(TestBase):
 
         response = self.client.get('/403')
         self.assertEqual(response.status_code, 403)
-        self.assertTrue("403 Error" in response.data)
+        self.assertTrue(b"403 Error" in response.data)
 
     
     def test_404_not_found(self):
         response = self.client.get('/nothinghere')
         self.assertEqual(response.status_code, 404)
-        self.assertTrue("404 Error" in response.data)
+        self.assertTrue(b"404 Error" in response.data)
 
 
     def test_500_internal_server_error(self):
@@ -208,7 +211,7 @@ class TestErrorPage(TestBase):
 
         response = self.client.get('/500')
         self.assertEqual(response.status_code, 500)
-        self.assertTrue("500 Error" in response.data)
+        self.assertTrue(b"500 Error" in response.data)
 
 if __name__ == '__main__':
     unittest.main()
